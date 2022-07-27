@@ -2,7 +2,9 @@ package org.openrewrite.houston;
 
 import org.openrewrite.ExecutionContext;
 import org.openrewrite.Recipe;
+import org.openrewrite.TreeVisitor;
 import org.openrewrite.internal.ListUtils;
+import org.openrewrite.internal.lang.Nullable;
 import org.openrewrite.java.JavaIsoVisitor;
 import org.openrewrite.java.JavaVisitor;
 import org.openrewrite.java.tree.J;
@@ -23,8 +25,13 @@ public class UnwrapRepeatableAnnotations extends Recipe {
     }
 
     @Override
-    protected JavaVisitor<ExecutionContext> getVisitor() {
-        return new JavaIsoVisitor<>() {
+    protected TreeVisitor<?, ExecutionContext> getSingleSourceApplicableTest() {
+        return new FindRepeatableAnnotations().getVisitor();
+    }
+
+    @Override
+    public JavaVisitor<ExecutionContext> getVisitor() {
+        return new JavaIsoVisitor<ExecutionContext>() {
             @Override
             public J.MethodDeclaration visitMethodDeclaration(J.MethodDeclaration method, ExecutionContext ctx) {
                 J.MethodDeclaration m = super.visitMethodDeclaration(method, ctx);

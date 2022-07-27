@@ -23,7 +23,7 @@ public class FindRepeatableAnnotations extends Recipe {
 
     @Override
     protected JavaVisitor<ExecutionContext> getSingleSourceApplicableTest() {
-        return new JavaVisitor<>() {
+        return new JavaVisitor<ExecutionContext>() {
             @Override
             public J visitJavaSourceFile(JavaSourceFile cu, ExecutionContext executionContext) {
                 for (JavaType javaType : cu.getTypesInUse().getTypesInUse()) {
@@ -37,8 +37,8 @@ public class FindRepeatableAnnotations extends Recipe {
     }
 
     @Override
-    protected JavaVisitor<ExecutionContext> getVisitor() {
-        return new JavaVisitor<>() {
+    public JavaVisitor<ExecutionContext> getVisitor() {
+        return new JavaVisitor<ExecutionContext>() {
             @Override
             public J visitAnnotation(J.Annotation annotation, ExecutionContext ctx) {
                 if (isRepeatable(annotation.getType())) {
