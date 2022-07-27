@@ -51,13 +51,13 @@ dependencies {
     implementation(platform("org.openrewrite.recipe:rewrite-recipe-bom:${rewriteBomVersion}"))
 
     implementation("org.openrewrite:rewrite-java")
-    runtimeOnly("org.openrewrite:rewrite-java-11")
 
     implementation("org.mapstruct:mapstruct:latest.release")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:latest.release")
     testImplementation("org.junit.jupiter:junit-jupiter-params:latest.release")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:latest.release")
+    testRuntimeOnly("org.openrewrite:rewrite-java-11")
 
     testImplementation("org.openrewrite:rewrite-test")
     testImplementation("org.assertj:assertj-core:latest.release")
@@ -69,8 +69,8 @@ tasks.named<Test>("test") {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 }
 
 configure<ContactsExtension> {

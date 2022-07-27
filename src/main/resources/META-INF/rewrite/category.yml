@@ -1,0 +1,5 @@
+---
+type: specs.openrewrite.org/v1beta/category
+name: Houston JUG
+packageName: org.openrewrite.houston
+description: 'Recipes built at the July 2022 Houston JUG!'
