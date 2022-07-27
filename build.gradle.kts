@@ -4,7 +4,6 @@ import nebula.plugin.contacts.ContactsExtension
 plugins {
     `java-library`
 
-    id("org.jetbrains.kotlin.jvm") version "1.6.21"
     id("nebula.release") version "15.3.1"
 
     id("nebula.maven-manifest") version "17.3.2"
@@ -54,9 +53,8 @@ dependencies {
     implementation("org.openrewrite:rewrite-java")
     runtimeOnly("org.openrewrite:rewrite-java-11")
 
-    testImplementation(platform(kotlin("bom", "1.6.21")))
-    testImplementation(kotlin("reflect"))
-    testImplementation(kotlin("stdlib"))
+    implementation("org.mapstruct:mapstruct:latest.release")
+
     testImplementation("org.junit.jupiter:junit-jupiter-api:latest.release")
     testImplementation("org.junit.jupiter:junit-jupiter-params:latest.release")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:latest.release")
@@ -71,8 +69,8 @@ tasks.named<Test>("test") {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 configure<ContactsExtension> {
@@ -90,10 +88,10 @@ configure<PublishingExtension> {
 }
 
 publishing {
-  repositories {
-      maven {
-          name = "moderne"
-          url = uri("https://us-west1-maven.pkg.dev/moderne-dev/moderne-recipe")
-      }
-  }
+    repositories {
+        maven {
+            name = "moderne"
+            url = uri("https://us-west1-maven.pkg.dev/moderne-dev/moderne-recipe")
+        }
+    }
 }

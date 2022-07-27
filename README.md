@@ -20,7 +20,9 @@ This will publish to your local maven repository, typically under `~/.m2/reposit
 Replace the groupId, artifactId, and recipe name in these samples with those you selected in the previous steps. 
 
 In a Maven project's pom.xml, make your recipe module a plugin dependency:
+
 ```xml
+
 <project>
     <build>
         <plugins>
@@ -30,7 +32,7 @@ In a Maven project's pom.xml, make your recipe module a plugin dependency:
                 <version>4.14.1</version>
                 <configuration>
                     <activeRecipes>
-                        <recipe>org.openrewrite.starter.NoGuavaListsNewArrayList</recipe>
+                        <recipe>org.openrewrite.houston.NoGuavaListsNewArrayList</recipe>
                     </activeRecipes>
                 </configuration>
                 <dependencies>
@@ -65,7 +67,7 @@ dependencies {
 }
 
 rewrite {
-    activeRecipe("org.openrewrite.starter.NoGuavaListsNewArrayList")
+    activeRecipe("org.openrewrite.houston.NoGuavaListsNewArrayList")
 }
 ```
 
