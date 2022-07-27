@@ -5,11 +5,11 @@ import org.openrewrite.java.JavaParser;
 import org.openrewrite.test.RecipeSpec;
 import org.openrewrite.test.RewriteTest;
 
-public class FindRepeatableAnnotationUsesTest implements RewriteTest {
+public class FindRepeatableAnnotationsTest implements RewriteTest {
 
     @Override
     public void defaults(RecipeSpec spec) {
-        spec.recipe(new FindRepeatableAnnotationUses())
+        spec.recipe(new FindRepeatableAnnotations())
           .parser(JavaParser.fromJavaVersion().classpath("mapstruct").build());
     }
 

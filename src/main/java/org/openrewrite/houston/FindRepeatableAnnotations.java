@@ -2,25 +2,23 @@ package org.openrewrite.houston;
 
 import org.openrewrite.ExecutionContext;
 import org.openrewrite.Recipe;
-import org.openrewrite.TreeVisitor;
 import org.openrewrite.internal.lang.Nullable;
-import org.openrewrite.java.JavaIsoVisitor;
 import org.openrewrite.java.JavaVisitor;
 import org.openrewrite.java.tree.J;
 import org.openrewrite.java.tree.JavaSourceFile;
 import org.openrewrite.java.tree.JavaType;
 import org.openrewrite.java.tree.TypeUtils;
 
-public class FindRepeatableAnnotationUses extends Recipe {
+public class FindRepeatableAnnotations extends Recipe {
 
     @Override
     public String getDisplayName() {
-        return "Find uses of `Repeatable` annotations.";
+        return "Find uses of `@Repeatable` annotations.";
     }
 
     @Override
     public String getDescription() {
-        return "Java 8 introduced the concept of `Repeatable` annotations.";
+        return "Java 8 introduced the concept of `@Repeatable` annotations.";
     }
 
     @Override
@@ -51,7 +49,7 @@ public class FindRepeatableAnnotationUses extends Recipe {
         };
     }
 
-    private boolean isRepeatable(@Nullable JavaType javaType) {
+    static boolean isRepeatable(@Nullable JavaType javaType) {
         JavaType.FullyQualified type = TypeUtils.asFullyQualified(javaType);
         if (TypeUtils.isAssignableTo("java.lang.annotation.Annotation", type)) {
             for (JavaType.FullyQualified ann : type.getAnnotations()) {
