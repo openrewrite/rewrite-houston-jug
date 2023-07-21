@@ -1,7 +1,10 @@
 package org.openrewrite.houston;
 
 import org.openrewrite.ExecutionContext;
+import org.openrewrite.Preconditions;
 import org.openrewrite.Recipe;
+import org.openrewrite.Tree;
+import org.openrewrite.TreeVisitor;
 import org.openrewrite.internal.lang.Nullable;
 import org.openrewrite.java.JavaVisitor;
 import org.openrewrite.java.tree.J;
@@ -22,23 +25,21 @@ public class FindRepeatableAnnotations extends Recipe {
     }
 
     @Override
-    protected JavaVisitor<ExecutionContext> getSingleSourceApplicableTest() {
-        return new JavaVisitor<ExecutionContext>() {
+    public TreeVisitor<?, ExecutionContext> getVisitor() {
+        return Preconditions.check(new JavaVisitor<ExecutionContext>() {
             @Override
-            public J visitJavaSourceFile(JavaSourceFile cu, ExecutionContext executionContext) {
-                for (JavaType javaType : cu.getTypesInUse().getTypesInUse()) {
-                    if (isRepeatable(javaType)) {
-                        return cu.withMarkers(cu.getMarkers().searchResult());
+            public @Nullable J visit(@Nullable Tree tree, ExecutionContext executionContext) {
+                if (tree instanceof JavaSourceFile) {
+                    JavaSourceFile cu = (JavaSourceFile)tree;
+                    for (JavaType javaType : cu.getTypesInUse().getTypesInUse()) {
+                        if (isRepeatable(javaType)) {
+                            return cu.withMarkers(cu.getMarkers().searchResult());
+                        }
                     }
                 }
-                return cu;
+                return super.visit(tree, executionContext);
             }
-        };
-    }
-
-    @Override
-    public JavaVisitor<ExecutionContext> getVisitor() {
-        return new JavaVisitor<ExecutionContext>() {
+        }, new JavaVisitor<ExecutionContext>() {
             @Override
             public J visitAnnotation(J.Annotation annotation, ExecutionContext ctx) {
                 if (isRepeatable(annotation.getType())) {
@@ -46,7 +47,7 @@ public class FindRepeatableAnnotations extends Recipe {
                 }
                 return super.visitAnnotation(annotation, ctx);
             }
-        };
+        });
     }
 
     static boolean isRepeatable(@Nullable JavaType javaType) {

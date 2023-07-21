@@ -1,6 +1,7 @@
 package org.openrewrite.houston;
 
 import org.openrewrite.ExecutionContext;
+import org.openrewrite.Preconditions;
 import org.openrewrite.Recipe;
 import org.openrewrite.TreeVisitor;
 import org.openrewrite.internal.ListUtils;
@@ -24,13 +25,8 @@ public class UnwrapRepeatableAnnotations extends Recipe {
     }
 
     @Override
-    protected TreeVisitor<?, ExecutionContext> getSingleSourceApplicableTest() {
-        return new FindRepeatableAnnotations().getVisitor();
-    }
-
-    @Override
-    public JavaVisitor<ExecutionContext> getVisitor() {
-        return new JavaIsoVisitor<ExecutionContext>() {
+    public TreeVisitor<?, ExecutionContext> getVisitor() {
+        return Preconditions.check(new FindRepeatableAnnotations().getVisitor(), new JavaIsoVisitor<ExecutionContext>() {
             @Override
             public J.MethodDeclaration visitMethodDeclaration(J.MethodDeclaration method, ExecutionContext ctx) {
                 J.MethodDeclaration m = super.visitMethodDeclaration(method, ctx);
@@ -39,7 +35,7 @@ public class UnwrapRepeatableAnnotations extends Recipe {
                     return m;
                 }
                 return maybeAutoFormat(m, m.withLeadingAnnotations(ann), ann.get(ann.size() - 1), ctx,
-                        getCursor().getParentOrThrow());
+                  getCursor().getParentOrThrow());
             }
 
             @Override
@@ -50,7 +46,7 @@ public class UnwrapRepeatableAnnotations extends Recipe {
                     return c;
                 }
                 return maybeAutoFormat(c, c.withLeadingAnnotations(ann), ann.get(ann.size() - 1), ctx,
-                        getCursor().getParentOrThrow());
+                  getCursor().getParentOrThrow());
             }
 
             @Override
@@ -61,7 +57,7 @@ public class UnwrapRepeatableAnnotations extends Recipe {
                     return v;
                 }
                 return maybeAutoFormat(v, v.withLeadingAnnotations(ann), ann.get(ann.size() - 1), ctx,
-                        getCursor().getParentOrThrow());
+                  getCursor().getParentOrThrow());
             }
 
             private List<J.Annotation> unwrap(List<J.Annotation> annotations) {
@@ -81,6 +77,6 @@ public class UnwrapRepeatableAnnotations extends Recipe {
                     return unwrapped.isEmpty() ? a : unwrapped;
                 });
             }
-        };
+        });
     }
 }
